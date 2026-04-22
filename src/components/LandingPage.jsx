@@ -8,7 +8,7 @@ import MusicPlayer from "./MusicPlayer";
 const scrapbookPhotos = [
   {
     id: 1,
-    src: "pics/ccadaa7a-65c3-4f44-92ea-ad5822aeaa14.jpg",
+    src: "/pics/ccadaa7a-65c3-4f44-92ea-ad5822aeaa14.jpg",
     caption: "Our first date...",
     description:
       "The moment everything changed. I still remember exactly how you looked.",
