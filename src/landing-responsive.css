@@ -1,0 +1,677 @@
+/* ═══════════════════════════════════════════════════════════════
+   LANDING PAGE — RESPONSIVE STYLES
+   Covers every major phone width from iPhone XR (375px) upward.
+   Import this file AFTER index.css in LandingPage.jsx / main.jsx.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────
+   BREAKPOINT REFERENCE TABLE
+   375px  → iPhone XR / 12 mini / SE 3rd gen (baseline)
+   390px  → iPhone 14 / 15 / 16
+   393px  → iPhone 16 Pro
+   402px  → iPhone 16 Plus
+   414px  → iPhone XS Max / 11 Pro Max
+   430px  → iPhone 14 Plus / 15 Plus / 16 Pro Max
+   360px  → Samsung Galaxy S21 / A52 / A32
+   384px  → Pixel 7a
+   412px  → Pixel 7 / 8 / 9
+   768px  → iPad mini portrait / large phones landscape
+   ───────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   BASE MOBILE-FIRST RESET  (applies to ALL screens ≤ 768px)
+   We scope everything here with a max-width guard so desktop
+   layout is untouched.
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+
+  /* ── html / body ── */
+  html {
+    font-size: 100%; /* Reset from 125% on mobile so rem values are sensible */
+  }
+
+  /* ── Landing root ── */
+  .landing-root {
+    padding: 2rem 1rem;
+  }
+
+  /* ── Hero ── */
+  .hero-section {
+    margin-top: 6vh;
+    margin-bottom: 8vh;
+    padding: 0 0.75rem;
+  }
+
+  .hero-title {
+    font-size: clamp(2.6rem, 11vw, 3.5rem);
+    margin-bottom: 1rem;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(0.9rem, 4vw, 1rem);
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+
+  /* Scroll indicator – bring up closer on mobile */
+  .scroll-indicator {
+    bottom: -4rem;
+  }
+
+  /* ── Timeline ── */
+  .walkthrough-container {
+    padding: 1.5rem 0.75rem 6rem;
+  }
+
+  .timeline-thread {
+    left: 1.25rem;
+  }
+
+  /* ── Step layout – always single column ── */
+  .walkthrough-step {
+    min-height: auto;
+    margin-bottom: 4rem;
+  }
+
+  .step-content {
+    flex-direction: column !important;
+    gap: 2rem;
+    padding-left: 2.5rem;
+  }
+
+  .timeline-node {
+    left: 1.25rem;
+  }
+
+  /* ── Step text ── */
+  .step-text-block {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .step-number {
+    top: -2.5rem;
+    left: -1rem;
+    font-size: 5rem;
+  }
+
+  /* Both layout-left and layout-right get same number position on mobile */
+  .layout-right .step-number {
+    right: auto;
+    left: -1rem;
+  }
+
+  .step-text-inner {
+    padding-right: 0.5rem;
+  }
+
+  .step-caption {
+    font-size: clamp(1.6rem, 7vw, 2.2rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .step-description {
+    font-size: clamp(0.9rem, 3.5vw, 1rem);
+    line-height: 1.65;
+  }
+
+  /* ── Polaroid card ── */
+  .step-image-block {
+    width: 100%;
+  }
+
+  .polaroid-card {
+    width: min(17rem, 82vw);
+    margin: 0 auto;
+    padding: 0.75rem 0.75rem 2.75rem;
+  }
+
+  /* ── Collage section ── */
+  .collage-section {
+    margin: 3rem auto;
+    padding: 1rem 0.75rem;
+  }
+
+  .collage-title {
+    font-size: clamp(2rem, 10vw, 2.6rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .collage-grid {
+    gap: 1.75rem 1rem;
+    padding: 1rem 0;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(15rem, 72vw);
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(13rem, 66vw);
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+
+  .collage-sticker {
+    font-size: 1.75rem;
+  }
+
+  /* ── Final section (love note + music player) ── */
+  .final-section-wrapper {
+    flex-direction: column !important;
+    gap: 2.5rem;
+    padding: 4rem 1rem;
+  }
+
+  .love-note-container,
+  .music-player-container {
+    justify-content: center;
+    width: 100%;
+    flex: unset;
+  }
+
+  .love-note-card {
+    max-width: 100%;
+    padding: 2rem 1.5rem;
+    transform: rotate(-1deg);
+  }
+
+  .music-player-widget {
+    max-width: 100%;
+    padding: 1.5rem 1.25rem;
+    transform: rotate(1deg);
+  }
+
+  /* ── Ending message ── */
+  .ending-message {
+    padding: 3rem 1rem 5rem;
+  }
+
+  .ending-title {
+    font-size: clamp(1.8rem, 8vw, 2.4rem);
+  }
+
+  .ending-subtitle {
+    font-size: 0.95rem;
+  }
+
+  /* ── Theme toggle ── */
+  .theme-toggle {
+    top: 0.85rem;
+    right: 0.85rem;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.2rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone XR  (375 × 812)  – absolute baseline
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 375px) {
+  .landing-root {
+    padding: 1.75rem 0.875rem;
+  }
+
+  .hero-title {
+    font-size: 2.4rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .step-content {
+    padding-left: 2rem;
+  }
+
+  .step-number {
+    font-size: 4.5rem;
+    top: -2rem;
+    left: -0.75rem;
+  }
+
+  .layout-right .step-number {
+    left: -0.75rem;
+  }
+
+  .step-caption {
+    font-size: 1.55rem;
+  }
+
+  .step-description {
+    font-size: 0.875rem;
+  }
+
+  .polaroid-card {
+    width: min(15rem, 86vw);
+    padding: 0.6rem 0.6rem 2.5rem;
+  }
+
+  .collage-title {
+    font-size: 1.9rem;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(13rem, 78vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(11.5rem, 72vw);
+  }
+
+  .note-greeting {
+    font-size: 1.25rem;
+  }
+
+  .note-body {
+    font-size: 0.95rem;
+  }
+
+  .note-signature {
+    font-size: 2rem;
+  }
+
+  .album-art {
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .song-title {
+    font-size: 1rem;
+  }
+
+  .ending-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone SE 3rd Gen / 12 mini  (375–390px)  — same as XR
+   ───────────────────────────────────────────────────────────── */
+/* (covered by the 375px block above + the 768px block) */
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone 14 / 15 / 16  (390px)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 376px) and (max-width: 393px) {
+  .hero-title {
+    font-size: 2.75rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .step-content {
+    padding-left: 2.25rem;
+  }
+
+  .step-number {
+    font-size: 5rem;
+  }
+
+  .step-caption {
+    font-size: 1.65rem;
+  }
+
+  .polaroid-card {
+    width: min(16rem, 84vw);
+  }
+
+  .collage-title {
+    font-size: 2rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone 16 Pro  (393px)  — handled by 376–393 block
+   ───────────────────────────────────────────────────────────── */
+
+/* ─────────────────────────────────────────────────────────────
+   ★  Samsung Galaxy S21 / A52 / A32  (360px)
+   ───────────────────────────────────────────────────────────── */
+@media (max-width: 360px) {
+  html {
+    font-size: 95%;
+  }
+
+  .landing-root {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .hero-title {
+    font-size: 2.2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.84rem;
+  }
+
+  .step-content {
+    padding-left: 1.75rem;
+  }
+
+  .step-number {
+    font-size: 4rem;
+    top: -1.75rem;
+    left: -0.5rem;
+  }
+
+  .layout-right .step-number {
+    left: -0.5rem;
+  }
+
+  .step-caption {
+    font-size: 1.45rem;
+  }
+
+  .step-description {
+    font-size: 0.85rem;
+  }
+
+  .polaroid-card {
+    width: min(14rem, 88vw);
+  }
+
+  .collage-title {
+    font-size: 1.75rem;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(12rem, 82vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(10.5rem, 76vw);
+  }
+
+  .note-body {
+    font-size: 0.9rem;
+  }
+
+  .note-signature {
+    font-size: 1.85rem;
+  }
+
+  .album-art {
+    width: 7.5rem;
+    height: 7.5rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  Google Pixel 7a  (384px)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 376px) and (max-width: 390px) {
+  .step-number {
+    font-size: 4.8rem;
+  }
+
+  .step-caption {
+    font-size: 1.6rem;
+  }
+
+  .polaroid-card {
+    width: min(15.5rem, 84vw);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone XS Max / 11 Pro Max  (414px)
+   ★  Google Pixel 7 / 8  (412px)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 394px) and (max-width: 428px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .step-number {
+    font-size: 5.5rem;
+  }
+
+  .step-caption {
+    font-size: 1.75rem;
+  }
+
+  .polaroid-card {
+    width: min(17rem, 80vw);
+  }
+
+  .collage-title {
+    font-size: 2.2rem;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(15rem, 70vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(13rem, 64vw);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  iPhone 14 Plus / 15 Plus / 16 Pro Max  (430px)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 429px) and (max-width: 480px) {
+  .hero-title {
+    font-size: 3.25rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    max-width: 90%;
+  }
+
+  .step-number {
+    font-size: 6rem;
+  }
+
+  .step-caption {
+    font-size: 1.85rem;
+  }
+
+  .step-description {
+    font-size: 0.95rem;
+  }
+
+  .polaroid-card {
+    width: min(18rem, 78vw);
+  }
+
+  .collage-title {
+    font-size: 2.4rem;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(16rem, 68vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(14rem, 62vw);
+  }
+
+  .music-player-widget {
+    max-width: 24rem;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ★  Large Phones / Phablets  (481px → 767px)
+   ───────────────────────────────────────────────────────────── */
+@media (min-width: 481px) and (max-width: 767px) {
+  html {
+    font-size: 107%;
+  }
+
+  .hero-title {
+    font-size: clamp(3rem, 10vw, 4rem);
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+    max-width: 80%;
+  }
+
+  .step-content {
+    padding-left: 3rem;
+  }
+
+  .step-number {
+    font-size: clamp(5.5rem, 14vw, 7rem);
+  }
+
+  .step-caption {
+    font-size: clamp(1.85rem, 6vw, 2.4rem);
+  }
+
+  .step-description {
+    font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+  }
+
+  .polaroid-card {
+    width: min(20rem, 72vw);
+  }
+
+  .collage-title {
+    font-size: clamp(2.4rem, 8vw, 3rem);
+  }
+
+  .collage-grid {
+    gap: 2.5rem 1.5rem;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(17rem, 60vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(15rem, 55vw);
+  }
+
+  /* Side-by-side starts to look okay above ~600px, but
+     we keep stacked here for safety on all phones */
+  .final-section-wrapper {
+    flex-direction: column !important;
+    gap: 3rem;
+    padding: 4rem 1.5rem;
+  }
+
+  .love-note-card {
+    max-width: 30rem;
+  }
+
+  .music-player-widget {
+    max-width: 26rem;
+  }
+
+  .ending-title {
+    font-size: clamp(2rem, 8vw, 2.6rem);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   LANDSCAPE PHONE  (height ≤ 480px, width ≥ 568px)
+   Handles iPhone XR / 14 / Pixel turned sideways.
+   ───────────────────────────────────────────────────────────── */
+@media (max-height: 480px) and (orientation: landscape) {
+  .hero-section {
+    margin-top: 3vh;
+    margin-bottom: 4vh;
+  }
+
+  .hero-title {
+    font-size: clamp(2rem, 8vw, 3rem);
+    margin-bottom: 0.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.85rem;
+    max-width: 60%;
+    margin: 0 auto;
+  }
+
+  .scroll-indicator {
+    display: none; /* Hide scroll hint in landscape — not needed */
+  }
+
+  .walkthrough-step {
+    min-height: auto;
+    margin-bottom: 3rem;
+  }
+
+  .step-content {
+    flex-direction: row !important;  /* Allow side-by-side in landscape */
+    gap: 2rem;
+    padding-left: 3rem;
+  }
+
+  .timeline-thread {
+    left: 50%;
+  }
+
+  .timeline-node {
+    left: 50%;
+  }
+
+  /* Restore right-layout position in landscape */
+  .layout-right .step-number {
+    right: -2rem;
+    left: auto;
+  }
+
+  .step-number {
+    font-size: 4.5rem;
+    top: -2rem;
+  }
+
+  .polaroid-card {
+    width: min(14rem, 40vw);
+  }
+
+  .final-section-wrapper {
+    flex-direction: row !important;
+    gap: 2rem;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .collage-grid {
+    flex-wrap: wrap;
+  }
+
+  .collage-polaroid .collage-image-container {
+    width: min(12rem, 28vw);
+  }
+
+  .collage-tape-photo .collage-image-container {
+    width: min(10rem, 24vw);
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────
+   SAFE AREA INSETS  (iPhone notch / Dynamic Island / home bar)
+   ───────────────────────────────────────────────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .landing-root {
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+    padding-left: max(1rem, env(safe-area-inset-left));
+    padding-right: max(1rem, env(safe-area-inset-right));
+  }
+
+  .theme-toggle {
+    top: max(0.85rem, env(safe-area-inset-top));
+    right: max(0.85rem, env(safe-area-inset-right));
+  }
+
+  .ending-message {
+    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+}

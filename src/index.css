@@ -91,7 +91,9 @@ body {
   background: var(--color-cream);
   overflow-x: hidden;
   font-size: 1rem; /* Base font size remains 1rem (which is now 20px) */
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }
 
 /* Smooth Theme Toggling via View Transitions */
@@ -110,8 +112,16 @@ body {
   align-items: center;
   justify-content: center;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 30%, var(--blush) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 80% 70%, var(--mauve) 0%, transparent 55%),
+    radial-gradient(
+      ellipse 80% 60% at 20% 30%,
+      var(--blush) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 60% 50% at 80% 70%,
+      var(--mauve) 0%,
+      transparent 55%
+    ),
     radial-gradient(
       ellipse 70% 70% at 50% 50%,
       var(--color-cream) 0%,
@@ -247,7 +257,11 @@ body {
 .passcode-card {
   position: relative;
   z-index: 10;
-  width: clamp(18rem, 90vw, 26.25rem); /* Fluid width with max 420px equivalent */
+  width: clamp(
+    18rem,
+    90vw,
+    26.25rem
+  ); /* Fluid width with max 420px equivalent */
   padding: 2.75rem 2.5rem 2.25rem;
   border-radius: 2rem;
 
@@ -1266,96 +1280,6 @@ body {
   right: 1.5rem;
   font-size: 1.8rem;
   opacity: 0.6;
-}
-
-/* ─────────────────────────────────────────────────────────────
-   MOBILE RESPONSIVENESS
-   ───────────────────────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .timeline-thread {
-    left: 2rem;
-  }
-
-  .timeline-node {
-    left: 2rem;
-  }
-
-  .step-content {
-    flex-direction: column !important;
-    gap: 3rem;
-    padding-left: 4rem;
-  }
-
-  .step-text-block,
-  .step-image-block {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .step-number {
-    top: -3rem;
-    left: -1.5rem;
-    font-size: 6rem;
-  }
-
-  .layout-right .step-number {
-    right: auto;
-    left: -1.5rem;
-  }
-
-  .polaroid-card {
-    width: 100%;
-    max-width: 20rem; /* 320px */
-    margin: 0 auto;
-  }
-
-  .final-section-wrapper {
-    flex-direction: column !important;
-    gap: 3rem;
-  }
-
-  .love-note-container,
-  .music-player-container {
-    justify-content: center;
-    width: 100%;
-  }
-
-  .love-note-card,
-  .music-player-widget {
-    max-width: 100%;
-  }
-
-  /* Collage Section Mobile */
-  .collage-section {
-    margin: 3rem auto;
-    padding: 1rem;
-  }
-
-  .collage-title {
-    font-size: clamp(2.2rem, 12vw, 3rem);
-    margin-bottom: 1rem;
-  }
-
-  .collage-grid {
-    gap: 2rem 1rem;
-    padding: 1rem 0;
-  }
-
-  .collage-polaroid .collage-image-container {
-    width: min(17.5rem, 75vw); /* 280px */
-    height: auto;
-    aspect-ratio: 4 / 5;
-  }
-
-  .collage-tape-photo .collage-image-container {
-    width: min(15rem, 70vw); /* 240px */
-    height: auto;
-    aspect-ratio: 3 / 4;
-  }
-
-  .collage-sticker {
-    font-size: 2rem;
-  }
 }
 
 /* ─────────────────────────────────────────────────────────────

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import LoveNote from "./LoveNote";
 import MusicPlayer from "./MusicPlayer";
+import "../landing-responsive.css";
 
 // ─── Photo Data (JSON format for easy editing) ──────────────────────────────
 // Leave the `src` empty strings as placeholders. When you have the photos,
