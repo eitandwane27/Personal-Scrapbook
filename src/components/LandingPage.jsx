@@ -6,10 +6,11 @@ import "../landing-responsive.css";
 // ─── Photo Data (JSON format for easy editing) ──────────────────────────────
 // Leave the `src` empty strings as placeholders. When you have the photos,
 // just place them in the /public folder and update the src (e.g., "/photos/pic1.jpg")
+//"/pics/ccadaa7a-65c3-4f44-92ea-ad5822aeaa14.jpg"
 const scrapbookPhotos = [
   {
     id: 1,
-    src: "/pics/ccadaa7a-65c3-4f44-92ea-ad5822aeaa14.jpg",
+    src: "",
     caption: "Our first date...",
     description:
       "The moment everything changed. I still remember exactly how you looked.",
@@ -139,7 +140,7 @@ export default function LandingPage() {
         </div>
 
         <h1 className="hero-title">
-          Hello, <span className="highlight">Cyrel</span>
+          Hello, <span className="highlight">Eitan</span>
         </h1>
         <p className="hero-subtitle">
           I made this little space just for us. A digital scrapbook of our
