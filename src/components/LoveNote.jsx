@@ -8,7 +8,7 @@ export default function LoveNote() {
         <div className="note-stamp">💌</div>
 
         <div className="note-content">
-          <p className="note-greeting">Dearest Cyrel,</p>
+          <p className="note-greeting">Dearest Eitan,</p>
 
           <div className="note-body">
             <p>
