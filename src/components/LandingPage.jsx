@@ -271,12 +271,12 @@ export default function LandingPage() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("is-visible");
-          } else {
-            entry.target.classList.remove("is-visible");
+            // Keep visible permanently once revealed - do not make photos disappear when scrolling up
+            observerRef.current.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
+      { threshold: 0.08, rootMargin: "0px 0px -20px 0px" },
     );
 
     const hiddenElements = document.querySelectorAll(".reveal-on-scroll");
