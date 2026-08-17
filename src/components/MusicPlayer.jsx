@@ -1,6 +1,29 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+
+// Default fallback audio if a YouTube track is slow or fails
+const DEFAULT_FALLBACK_MP3 =
+  "/audio/Jolianne, Arthur Nery  Palayo Sa Mundo (Official Lyric Video).mp3";
+// Max milliseconds to wait for YouTube to start playing before falling back to local MP3
+const YOUTUBE_TIMEOUT_MS = 4500;
 
 const playlist = [
+  // ─── 2 Hardcoded MP3 Songs (Play First on Login) ───
+  {
+    id: "173SbLSn620",
+    title: "Palayo Sa Mundo",
+    artist: "Jolianne, Arthur Nery",
+    cover: "https://i.ytimg.com/vi/173SbLSn620/maxresdefault.jpg",
+    mp3: "/audio/Jolianne, Arthur Nery  Palayo Sa Mundo (Official Lyric Video).mp3",
+  },
+  {
+    id: "j97SIWer-aY",
+    title: "Lagi",
+    artist: "Skusta Clee",
+    cover: "https://i.ytimg.com/vi/j97SIWer-aY/maxresdefault.jpg",
+    mp3: "/audio/Skusta Clee - Lagi (Official Music Video).mp3",
+  },
+
+  // ─── YouTube Streaming Playlist ───
   {
     id: "GnUW4AF1LZo",
     title: "Just the Way You Are",
@@ -50,12 +73,6 @@ const playlist = [
     cover: "https://i.ytimg.com/vi/SA3ZaJaW98w/maxresdefault.jpg",
   },
   {
-    id: "GnUW4AF1LZo",
-    title: "Just the Way You Are",
-    artist: "Bruno Mars",
-    cover: "https://i.ytimg.com/vi/GnUW4AF1LZo/maxresdefault.jpg",
-  },
-  {
     id: "yEA3qaB0dH8",
     title: "Stuck with U",
     artist: "Ariana Grande & Justin Bieber",
@@ -69,67 +86,176 @@ const playlist = [
   },
 ];
 
-export default function MusicPlayer() {
+export default function MusicPlayer({ autoPlay = true }) {
+  // Start with Jolianne, Arthur Nery - Palayo Sa Mundo as the first song
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(autoPlay);
+  const [isFallbackActive, setIsFallbackActive] = useState(false);
+
   const iframeRef = useRef(null);
+  const audioRef = useRef(null);
   const containerRef = useRef(null);
+  const fallbackTimerRef = useRef(null);
 
   const currentSong = playlist[currentIndex];
+  const isDirectMp3 = Boolean(currentSong.mp3);
+  const activeAudioSrc = currentSong.mp3 || DEFAULT_FALLBACK_MP3;
+  const isUsingAudioElement = isDirectMp3 || isFallbackActive;
 
-  // Handle song change
-  useEffect(() => {
-    if (isPlaying && iframeRef.current) {
-      // Small delay to ensure iframe is loaded before playing
-      const timer = setTimeout(() => {
-        iframeRef.current.contentWindow.postMessage(
-          '{"event":"command","func":"playVideo","args":""}',
-          "*",
-        );
-      }, 500);
-      return () => clearTimeout(timer);
+  const postPlayerCommand = useCallback((func, args = "") => {
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({
+          event: "command",
+          func: func,
+          args: args,
+        }),
+        "*",
+      );
     }
-  }, [currentIndex, isPlaying]);
+  }, []);
+
+  // Switch to HTML5 MP3 fallback if YouTube stream fails or times out
+  const switchToFallback = useCallback(() => {
+    setIsFallbackActive(true);
+    if (iframeRef.current?.contentWindow) {
+      iframeRef.current.contentWindow.postMessage(
+        JSON.stringify({ event: "command", func: "pauseVideo", args: "" }),
+        "*",
+      );
+    }
+    if (audioRef.current && isPlaying) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((err) => {
+        console.warn("Audio playback notice:", err);
+      });
+    }
+  }, [isPlaying]);
+
+  // Handle play / pause and track changes
+  useEffect(() => {
+    if (fallbackTimerRef.current) {
+      clearTimeout(fallbackTimerRef.current);
+      fallbackTimerRef.current = null;
+    }
+
+    if (isPlaying) {
+      if (isDirectMp3) {
+        // Direct MP3 track: play immediately via HTML5 audio
+        if (iframeRef.current?.contentWindow) {
+          postPlayerCommand("pauseVideo");
+        }
+        audioRef.current
+          ?.play()
+          .catch((err) => console.warn("Audio play warning:", err));
+      } else if (isFallbackActive) {
+        // YouTube track with active fallback: play fallback MP3
+        if (iframeRef.current?.contentWindow) {
+          postPlayerCommand("pauseVideo");
+        }
+        audioRef.current
+          ?.play()
+          .catch((err) => console.warn("Fallback play warning:", err));
+      } else {
+        // YouTube track: pause HTML5 audio, command YouTube to play
+        if (audioRef.current) {
+          audioRef.current.pause();
+        }
+        postPlayerCommand("playVideo");
+        const timer1 = setTimeout(() => postPlayerCommand("playVideo"), 300);
+        const timer2 = setTimeout(() => postPlayerCommand("playVideo"), 800);
+
+        // Fallback watchdog for slow connection on YouTube streams
+        fallbackTimerRef.current = setTimeout(() => {
+          console.info(
+            "YouTube stream took too long to load. Switching to MP3 fallback.",
+          );
+          switchToFallback();
+        }, YOUTUBE_TIMEOUT_MS);
+
+        return () => {
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+          if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+        };
+      }
+    } else {
+      // Paused state
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      postPlayerCommand("pauseVideo");
+    }
+  }, [
+    currentIndex,
+    isPlaying,
+    isDirectMp3,
+    isFallbackActive,
+    postPlayerCommand,
+    switchToFallback,
+  ]);
 
   const togglePlay = () => {
-    const player = iframeRef.current;
-    if (!player) return;
-
     if (!isPlaying) {
-      player.contentWindow.postMessage(
-        '{"event":"command","func":"playVideo","args":""}',
-        "*",
-      );
+      if (isUsingAudioElement) {
+        audioRef.current?.play().catch((err) => console.warn(err));
+      } else {
+        postPlayerCommand("playVideo");
+      }
       setIsPlaying(true);
     } else {
-      player.contentWindow.postMessage(
-        '{"event":"command","func":"pauseVideo","args":""}',
-        "*",
-      );
+      if (isUsingAudioElement) {
+        audioRef.current?.pause();
+      } else {
+        postPlayerCommand("pauseVideo");
+      }
       setIsPlaying(false);
     }
   };
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
+    setIsFallbackActive(false);
     setCurrentIndex((prev) => (prev + 1) % playlist.length);
-  };
+  }, []);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
+    setIsFallbackActive(false);
     setCurrentIndex((prev) => (prev - 1 + playlist.length) % playlist.length);
-  };
+  }, []);
 
-  // Auto-next logic: Listen for messages from YouTube IFrame API
+  // Listen for messages from YouTube IFrame API
   useEffect(() => {
     const handleMessage = (event) => {
-      // Only process messages that are strings and potentially from YouTube
       if (typeof event.data === "string") {
         try {
           const data = JSON.parse(event.data);
-          // YouTube API sends 'onStateChange' with info: 0 when a video ends
+
+          // Video confirmed playing -> cancel fallback watchdog
+          if (
+            (data.event === "onStateChange" && data.info === 1) ||
+            (data.event === "infoDelivery" && data.info?.playerState === 1)
+          ) {
+            if (fallbackTimerRef.current) {
+              clearTimeout(fallbackTimerRef.current);
+              fallbackTimerRef.current = null;
+            }
+          }
+
+          // YouTube track ended -> advance to next track
           if (data.event === "onStateChange" && data.info === 0) {
             handleNext();
           }
-        } catch (e) {
+
+          // YouTube error on a YouTube stream -> switch to fallback
+          if (data.event === "onError" && !isDirectMp3) {
+            console.warn(
+              "YouTube player error event:",
+              data.info,
+              "- switching to fallback.",
+            );
+            switchToFallback();
+          }
+        } catch {
           // Ignore non-JSON messages
         }
       }
@@ -137,28 +263,13 @@ export default function MusicPlayer() {
 
     window.addEventListener("message", handleMessage);
     return () => window.removeEventListener("message", handleMessage);
-  }, []); // Empty dependency array means this listener is set up once
+  }, [handleNext, isDirectMp3, switchToFallback]);
 
-  // Auto-play logic: Start playing when the collage section scrolls into view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsPlaying(true);
-          // We only want to auto-play once when they reach the section
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.1 }, // Trigger as soon as the section starts appearing
-    );
-
-    const target = document.querySelector(".collage-section");
-    if (target) {
-      observer.observe(target);
+  const handleIframeLoad = () => {
+    if (isPlaying && !isDirectMp3 && !isFallbackActive) {
+      postPlayerCommand("playVideo");
     }
-
-    return () => observer.disconnect();
-  }, []);
+  };
 
   return (
     <div className="music-player-container" ref={containerRef}>
@@ -171,6 +282,9 @@ export default function MusicPlayer() {
                 src={currentSong.cover}
                 alt={currentSong.title}
                 className="album-cover-img"
+                onError={(e) => {
+                  e.currentTarget.src = `https://i.ytimg.com/vi/${currentSong.id}/hqdefault.jpg`;
+                }}
               />
             ) : (
               <span className="music-emoji">🎵</span>
@@ -185,30 +299,61 @@ export default function MusicPlayer() {
 
         {/* Player Controls */}
         <div className="player-controls">
-          <button className="nav-btn" onClick={handlePrev}>
+          <button
+            className="nav-btn"
+            onClick={handlePrev}
+            aria-label="Previous song"
+          >
             ⏮
           </button>
-          <button className="play-btn" onClick={togglePlay}>
+          <button
+            className="play-btn"
+            onClick={togglePlay}
+            aria-label={isPlaying ? "Pause" : "Play"}
+          >
             {isPlaying ? "⏸" : "▶"}
           </button>
-          <button className="nav-btn" onClick={handleNext}>
+          <button
+            className="nav-btn"
+            onClick={handleNext}
+            aria-label="Next song"
+          >
             ⏭
           </button>
         </div>
 
-        {/* Hidden YouTube Embed */}
-        <div className="hidden-embed">
-          <iframe
-            key={currentSong.id} // Re-mount iframe on song change to load new video
-            ref={iframeRef}
-            width="0"
-            height="0"
-            src={`https://www.youtube.com/embed/${currentSong.id}?enablejsapi=1&autoplay=${isPlaying ? 1 : 0}`}
-            title="YouTube video player"
-            frameBorder="0"
-            allow="autoplay; encrypted-media"
-          ></iframe>
-        </div>
+        {/* Hidden YouTube Embed (Used for YouTube tracks) */}
+        {!isDirectMp3 && !isFallbackActive && (
+          <div className="hidden-embed">
+            <iframe
+              key={currentSong.id} // Re-mount iframe on song change to load new video
+              ref={iframeRef}
+              width="0"
+              height="0"
+              src={`https://www.youtube.com/embed/${currentSong.id}?enablejsapi=1&autoplay=${isPlaying ? 1 : 0}&playsinline=1`}
+              title="YouTube video player"
+              frameBorder="0"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              onLoad={handleIframeLoad}
+            ></iframe>
+          </div>
+        )}
+
+        {/* Native HTML5 Audio Element (For hardcoded MP3s & fallback mode) */}
+        <audio
+          ref={audioRef}
+          src={activeAudioSrc}
+          preload="auto"
+          onEnded={handleNext}
+          onError={(e) => {
+            if (activeAudioSrc !== DEFAULT_FALLBACK_MP3) {
+              e.currentTarget.src = DEFAULT_FALLBACK_MP3;
+              if (isPlaying && isUsingAudioElement) {
+                e.currentTarget.play().catch(() => {});
+              }
+            }
+          }}
+        />
       </div>
     </div>
   );

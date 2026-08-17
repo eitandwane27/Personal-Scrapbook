@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
 // ─── Passcode (hardcoded, frontend-only) ───────────────────────────────────
-const SECRET = "eitan"; // change to her first name if desired
+const SECRET = "krishna"; // change to her first name if desired
 
 export default function PasscodeScreen({ onUnlock }) {
   const [value, setValue] = useState("");

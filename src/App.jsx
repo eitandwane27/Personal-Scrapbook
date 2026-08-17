@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PasscodeScreen from "./components/PasscodeScreen";
 import LandingPage from "./components/LandingPage";
 
@@ -6,21 +6,19 @@ import "./scrollbar.css";
 
 function App() {
   const [unlocked, setUnlocked] = useState(false);
-  const [isDark, setIsDark] = useState(false);
-  const [rotation, setRotation] = useState(0);
-
-  // Initialize theme from system preference or localStorage
-  useEffect(() => {
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window === "undefined") return false;
     const savedTheme = localStorage.getItem("theme");
     const systemPrefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)",
     ).matches;
-
-    if (savedTheme === "dark" || (!savedTheme && systemPrefersDark)) {
-      setIsDark(true);
+    const initialDark = savedTheme === "dark" || (!savedTheme && systemPrefersDark);
+    if (initialDark) {
       document.documentElement.classList.add("dark");
     }
-  }, []);
+    return initialDark;
+  });
+  const [rotation, setRotation] = useState(0);
 
   const toggleTheme = () => {
     const newDark = !isDark;
