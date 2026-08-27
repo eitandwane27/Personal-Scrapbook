@@ -134,7 +134,7 @@ export default function LoveNote({
             <span className="airmail-badge">
               {isLocked ? "🔒 TIME CAPSULE AIR MAIL" : "💌 SPECIAL AIR MAIL"}
             </span>
-            <p className="recipient-name">To: My Dearest Krishna ❤</p>
+            <p className="recipient-name">To: My Dearest ❤</p>
             <p className="sender-note">From: Eitan</p>
           </div>
 
