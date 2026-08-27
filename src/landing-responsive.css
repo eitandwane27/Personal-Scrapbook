@@ -13,14 +13,26 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   IPAD / TABLET  (>= 768px)
+   APPLE IPAD & TABLET (>= 768px to < 1024px)
+   (iPad Mini 768px, iPad 10.2 810px, iPad Air 820px, iPad Pro 11" 834px)
    ───────────────────────────────────────────────────────────── */
 @media (min-width: 768px) {
-  .booth-subtitle {
-    font-size: 1.05rem;
+  .booth-hero {
+    padding: 4.5rem 1.5rem 2.5rem;
+    gap: 1.25rem;
   }
 
-  /* Fan the strips into a row that wraps naturally */
+  .booth-title {
+    font-size: clamp(3.2rem, 6.5vw, 4.8rem);
+  }
+
+  .booth-subtitle {
+    font-size: 1.05rem;
+    max-width: 36rem;
+    margin: 0 auto;
+  }
+
+  /* Strips Grid: 2 columns fanned neatly */
   .strips-grid {
     flex-direction: row;
     flex-wrap: wrap;
@@ -34,18 +46,38 @@
   }
 
   .print-grid {
-    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(14.5rem, 1fr));
     justify-items: center;
     gap: 3rem 2rem;
   }
 
   .scratchcards-grid {
     grid-template-columns: repeat(2, 1fr);
+    max-width: 44rem;
+    margin: 0 auto;
+    gap: 1.5rem;
+  }
+
+  .final-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .letter-shell {
+    width: 100%;
+    max-width: 27rem;
+  }
+
+  .music-player-container {
+    width: 100%;
+    max-width: 24rem;
   }
 }
 
 /* ─────────────────────────────────────────────────────────────
-   DESKTOP  (>= 1024px)
+   APPLE IPAD PRO & DESKTOP (>= 1024px)
+   (iPad Pro 11" Landscape 1194px, iPad Pro 12.9"/13" 1024px/1366px)
    ───────────────────────────────────────────────────────────── */
 @media (min-width: 1024px) {
   .film-strip {
@@ -54,29 +86,50 @@
 
   .strips-grid {
     justify-content: space-evenly;
-    gap: 2rem;
+    gap: 2.5rem;
+  }
+
+  .print-grid {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 3.5rem 2.5rem;
   }
 
   .scratchcards-grid {
     grid-template-columns: repeat(4, 1fr);
+    max-width: 62rem;
+    gap: 1.5rem;
   }
 
-  /* Letter left, music player right */
+  /* Letter left, music player right on iPad Pro landscape / desktop */
   .final-section {
     flex-direction: row;
     align-items: flex-start;
     justify-content: center;
-    gap: 3rem;
+    gap: 3.5rem;
   }
 
   .letter-shell {
     flex: 1.15;
-    max-width: 27.5rem;
+    max-width: 28rem;
   }
 
   .music-player-container {
     flex: 0.85;
     max-width: 23rem;
+  }
+}
+
+/* ── Specific iPad Pro Touch & Safari WebKit Optimizations ── */
+@media (hover: none) and (pointer: coarse) {
+  .action-btn,
+  .passcode-tab-btn,
+  .letter-seal,
+  .preview-toggle-btn,
+  .theme-toggle,
+  .music-control-btn,
+  .envelope-sealed-wrapper {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 }
 

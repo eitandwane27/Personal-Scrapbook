@@ -2,6 +2,12 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 
 const playlist = [
   {
+    id: "uLL2xTK35Qc",
+    title: "Lover",
+    artist: "Taylor Swift",
+    cover: "https://i.ytimg.com/vi/uLL2xTK35Qc/maxresdefault.jpg",
+  },
+  {
     id: "173SbLSn620",
     title: "Palayo Sa Mundo",
     artist: "Jolianne, Arthur Nery",
@@ -74,6 +80,83 @@ const playlist = [
     cover: "https://i.ytimg.com/vi/T1Fk1jdtGx0/maxresdefault.jpg",
   },
 ];
+
+function PrevIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="control-icon"
+    >
+      <path d="M6 6a1 1 0 0 1 2 0v12a1 1 0 0 1-2 0V6zm3.2 6.74a1 1 0 0 1 0-1.48l8.2-6.56A1 1 0 0 1 19 5.48v13.04a1 1 0 0 1-1.6.8l-8.2-6.58z" />
+    </svg>
+  );
+}
+
+function NextIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="control-icon"
+    >
+      <path d="M18 6a1 1 0 0 0-2 0v12a1 1 0 0 0 2 0V6zm-3.2 6.74a1 1 0 0 0 0-1.48L6.6 4.7A1 1 0 0 0 5 5.48v13.04a1 1 0 0 0 1.6.8l8.2-6.58z" />
+    </svg>
+  );
+}
+
+function PlayIcon() {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="control-icon play-icon-svg"
+      style={{ transform: "translateX(1px)" }}
+    >
+      <path d="M8 5.14v13.72a1 1 0 0 0 1.54.84l10.3-6.86a1 1 0 0 0 0-1.68L9.54 4.3A1 1 0 0 0 8 5.14z" />
+    </svg>
+  );
+}
+
+function PauseIcon() {
+  return (
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="control-icon"
+    >
+      <rect x="6.5" y="5" width="3.5" height="14" rx="1.5" />
+      <rect x="14" y="5" width="3.5" height="14" rx="1.5" />
+    </svg>
+  );
+}
+
+function MusicNoteIcon() {
+  return (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      className="music-note-svg"
+    >
+      <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
+    </svg>
+  );
+}
 
 export default function MusicPlayer({ autoPlay = true }) {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -181,7 +264,9 @@ export default function MusicPlayer({ autoPlay = true }) {
                 }}
               />
             ) : (
-              <span className="music-emoji">🎵</span>
+              <div className="music-emoji">
+                <MusicNoteIcon />
+              </div>
             )}
           </div>
         </div>
@@ -194,25 +279,31 @@ export default function MusicPlayer({ autoPlay = true }) {
         {/* Player Controls */}
         <div className="player-controls">
           <button
+            type="button"
             className="nav-btn"
             onClick={handlePrev}
             aria-label="Previous song"
+            title="Previous track"
           >
-            ⏮
+            <PrevIcon />
           </button>
           <button
+            type="button"
             className="play-btn"
             onClick={togglePlay}
             aria-label={isPlaying ? "Pause" : "Play"}
+            title={isPlaying ? "Pause" : "Play"}
           >
-            {isPlaying ? "⏸" : "▶"}
+            {isPlaying ? <PauseIcon /> : <PlayIcon />}
           </button>
           <button
+            type="button"
             className="nav-btn"
             onClick={handleNext}
             aria-label="Next song"
+            title="Next track"
           >
-            ⏭
+            <NextIcon />
           </button>
         </div>
 
